@@ -22,6 +22,8 @@ class HamburgerViewController: UIViewController {
         userImageView.clipsToBounds = true
     }
 
+    @IBAction func swipeGestureRecogniserAction(_ sender: UISwipeGestureRecognizer) {
+    }
     /*
     // MARK: - Navigation
 

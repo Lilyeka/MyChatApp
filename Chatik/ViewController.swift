@@ -9,50 +9,49 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     
     @IBOutlet weak var hamburgerViewLeadingConstraintt: NSLayoutConstraint!
     @IBOutlet weak var hamburgerBackgroundViewLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var hamburgerLeading: NSLayoutConstraint!
+ 
     @IBOutlet weak var gamburgerBackgroundView: UIView!
     @IBOutlet weak var hamburgerView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        gamburgerBackgroundView.isHidden = true
+        gamburgerBackgroundView.alpha = 0.0
         // Do any additional setup after loading the view.
     }
-
-    @IBAction func showHamburger(_ sender: UIButton) {
+    
+    @IBAction func tapBgViewAction(_ sender: UITapGestureRecognizer) {
+        hideHamburgeView()
+    }
+    
+    @IBAction func swipeToTheLeftAction(_ sender: Any) {
+        hideHamburgeView()
+    }
+    
+    @IBAction func swipeToTheRightAction(_ sender: Any) {
+        showHamburgerView()
+    }
+    
+    private func showHamburgerView() {
+        if self.hamburgerViewLeadingConstraintt.constant != 0  {
+            gamburgerBackgroundView.alpha = 0.7
+            self.hamburgerViewLeadingConstraintt.constant = 0
+            UIView.animate(withDuration: 0.6, delay: 0.0, options: .layoutSubviews, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
+    private func hideHamburgeView() {
         if self.hamburgerViewLeadingConstraintt.constant == 0 {
-             gamburgerBackgroundView.isHidden = true
+            gamburgerBackgroundView.alpha = 0.0
             self.hamburgerViewLeadingConstraintt.constant = -380
-             UIView.animate(withDuration: 0.6, delay: 0.0, options: .layoutSubviews, animations: {
+            UIView.animate(withDuration: 0.6, delay: 0.0, options: .layoutSubviews, animations: {
                 self.view.layoutIfNeeded()})
-             } else {
-                gamburgerBackgroundView.isHidden = false
-                self.hamburgerViewLeadingConstraintt.constant = 0
-                      UIView.animate(withDuration: 0.6, delay: 0.0, options: .layoutSubviews, animations: {
-                          self.view.layoutIfNeeded()
-                      })
-                }
-      
-        print("qwqw")
-        
-//        if leadingTabelViewLayoutConstraint.constant == 0 {
-//            leadingTabelViewLayoutConstraint.constant = UIScreen.main.bounds.size.width / 2
-//            trailingTableViewLayoutConstraint.constant = UIScreen.main.bounds.size.width * -0.5
-//            UIView.animate(withDuration: 0.3, delay: 0.0, options: .layoutSubviews, animations: {
-//                self.view.layoutIfNeeded()
-//            })
-//        } else {
-//            leadingTabelViewLayoutConstraint.constant = 0
-//            trailingTableViewLayoutConstraint.constant = 0
-//            UIView.animate(withDuration: 0.3, delay: 0.0, options: .layoutSubviews, animations: {
-//                self.view.layoutIfNeeded()
-//            })
-//        }
-        
+        }
     }
     
 }

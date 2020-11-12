@@ -18,6 +18,11 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WFl-C8-I9c" colorLabel="IBBuiltInLabel-Red">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="RKy-VN-uCU" appends="YES" id="rZh-Yk-61f"/>
+                                    <outletCollection property="gestureRecognizers" destination="dlA-Cb-iBn" appends="YES" id="a4V-Tr-dA3"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Bm-H9-K5z">
                                 <rect key="frame" x="-280" y="0.0" width="250" height="896"/>
@@ -40,18 +45,9 @@
                                     <constraint firstItem="Nzq-gt-3bc" firstAttribute="leading" secondItem="4Bm-H9-K5z" secondAttribute="leading" id="zoB-r5-sps"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h62-5k-dbs">
-                                <rect key="frame" x="107" y="364" width="200" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Show hamburger"/>
-                                <connections>
-                                    <action selector="settingsBtnAction:" destination="YsU-SW-ZzN" eventType="touchUpInside" id="51S-rf-iEr"/>
-                                    <action selector="showHamburger:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5zg-jd-btg"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="4Bm-H9-K5z" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="7UF-Rd-Gbw"/>
                             <constraint firstItem="4Bm-H9-K5z" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="-280" id="NdJ-kt-c4z"/>
@@ -62,6 +58,9 @@
                             <constraint firstItem="WFl-C8-I9c" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="lvT-OW-BbO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="mT9-Su-Q8e" appends="YES" id="CdS-YR-c2W"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="gamburgerBackgroundView" destination="WFl-C8-I9c" id="8I1-IO-1OI"/>
@@ -71,6 +70,21 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="RKy-VN-uCU">
+                    <connections>
+                        <action selector="tapBgViewAction:" destination="BYZ-38-t0r" id="694-o7-txq"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="mT9-Su-Q8e">
+                    <connections>
+                        <action selector="swipeToTheRightAction:" destination="BYZ-38-t0r" id="MEM-yt-Z57"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="dlA-Cb-iBn">
+                    <connections>
+                        <action selector="swipeToTheLeftAction:" destination="BYZ-38-t0r" id="oHT-Nm-thf"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-23" y="-184"/>
         </scene>
