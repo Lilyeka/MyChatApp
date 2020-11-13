@@ -19,9 +19,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var hamburgerView: UIView!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var bottomViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -75,5 +79,33 @@ class ViewController: UIViewController {
                 self.view.layoutIfNeeded()})
         }
     }
+}
+
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+        let cell = tableView.dequeueReusableCell(
+        withIdentifier: "Cell",
+        for: indexPath) as! ChatMessageTableViewCell
+        cell.messageLabel.text = "qwtqwywteuwetwqyetqwueytwqyetqwetqweytwqueytwqueytwqyetwqyetqwuyetwquyetwquyetwqqtwequwyetqwyet"
+        return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(
+                   withIdentifier: "CellUser",
+                   for: indexPath) as! UserMessageTableViewCell
+                   cell.messageLabel.text = "qwtqwywteuwetwqyetqwueytwqyetqwetqweytwqueytwqueytwqyetwqyetqwuyetwquyetwquyetwqqtwequwyetqwyet"
+                   return cell
+        }
+    }
+    
+    
+}
+
+extension ViewController: UITableViewDelegate {
+    
 }
 

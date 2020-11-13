@@ -18,6 +18,75 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Xug-2W-tPU">
                                 <rect key="frame" x="0.0" y="44" width="414" height="738"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="7jy-el-rbd" customClass="ChatMessageTableViewCell" customModule="Chatik" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7jy-el-rbd" id="ATe-r1-xao">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Jl-hh-yxy">
+                                                    <rect key="frame" x="28" y="11" width="250" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="250" id="Sa1-mT-o7R"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="3Jl-hh-yxy" secondAttribute="bottom" id="Y8y-7K-XNe"/>
+                                                <constraint firstItem="3Jl-hh-yxy" firstAttribute="leading" secondItem="ATe-r1-xao" secondAttribute="leadingMargin" constant="8" id="h7F-cf-CMX"/>
+                                                <constraint firstItem="3Jl-hh-yxy" firstAttribute="top" secondItem="ATe-r1-xao" secondAttribute="topMargin" id="nYr-Lm-XOy"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="messageLabel" destination="3Jl-hh-yxy" id="QLo-4K-nbw"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellUser" id="fOv-b1-fcC" customClass="UserMessageTableViewCell" customModule="Chatik" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="71" width="414" height="21"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fOv-b1-fcC" id="HEx-jZ-7O9">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UserMessage" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jjm-rF-Wu4">
+                                                    <rect key="frame" x="149" y="0.0" width="250" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="250" id="hWJ-Xf-73H"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Jjm-rF-Wu4" firstAttribute="top" secondItem="HEx-jZ-7O9" secondAttribute="top" id="Sbs-3E-dRa"/>
+                                                <constraint firstAttribute="bottom" secondItem="Jjm-rF-Wu4" secondAttribute="bottom" id="ebZ-Lx-hde"/>
+                                                <constraint firstAttribute="trailing" secondItem="Jjm-rF-Wu4" secondAttribute="trailing" constant="15" id="k70-GJ-6Ac"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="messageLabel" destination="Jjm-rF-Wu4" id="QxZ-eZ-Hik"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SFK-yh-OGA">
                                 <rect key="frame" x="0.0" y="782" width="414" height="80"/>
@@ -122,6 +191,7 @@
                         <outlet property="hamburgerBackgroundViewLeadingConstraint" destination="fvs-2S-iyc" id="jVm-Zq-wpZ"/>
                         <outlet property="hamburgerView" destination="4Bm-H9-K5z" id="tay-Lf-XPp"/>
                         <outlet property="hamburgerViewLeadingConstraintt" destination="NdJ-kt-c4z" id="e5d-1A-Kgl"/>
+                        <outlet property="tableView" destination="Xug-2W-tPU" id="LYE-pG-s9i"/>
                         <outlet property="textView" destination="CBh-ri-vwc" id="i4a-5l-T7H"/>
                         <outlet property="viewLeadingConstraint" destination="SQF-Jj-Ihw" id="nTM-VM-Kaq"/>
                         <outlet property="viewTrailingConstraint" destination="FNd-uI-1xe" id="gBw-AZ-XfR"/>
