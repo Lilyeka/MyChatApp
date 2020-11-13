@@ -9,20 +9,27 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    
+    //MARK: - IBOutlets
     @IBOutlet weak var hamburgerViewLeadingConstraintt: NSLayoutConstraint!
     @IBOutlet weak var hamburgerBackgroundViewLeadingConstraint: NSLayoutConstraint!
- 
+    @IBOutlet weak var viewTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var viewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bgHamburgerViewTrailing: NSLayoutConstraint!
     @IBOutlet weak var gamburgerBackgroundView: UIView!
     @IBOutlet weak var hamburgerView: UIView!
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var bottomViewBottomConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        gamburgerBackgroundView.alpha = 0.0
-        // Do any additional setup after loading the view.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    @IBAction func tapOnTheBaseTableView(_ sender: UITapGestureRecognizer) {
+        textView.endEditing(true)
+        
+    }
     @IBAction func tapBgViewAction(_ sender: UITapGestureRecognizer) {
         hideHamburgeView()
     }
@@ -35,9 +42,24 @@ class ViewController: UIViewController {
         showHamburgerView()
     }
     
+    @objc func keyboardWillShow(notification: Notification) {
+        let keyboardSize = (notification.userInfo?  [UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        let keyboardHeight = keyboardSize?.height
+        
+        if #available(iOS 11.0, *) {
+            self.bottomViewBottomConstraint.constant = keyboardHeight! - view.safeAreaInsets.bottom
+        } else { self.bottomViewBottomConstraint.constant = view.safeAreaInsets.bottom }
+        UIView.animate(withDuration: 0.5) { self.view.layoutIfNeeded()}
+    }
+    
+    @objc func keyboardWillHide(notification: Notification){
+        self.bottomViewBottomConstraint.constant =  0
+        UIView.animate(withDuration: 0.5){ self.view.layoutIfNeeded() }
+    }
+    
     private func showHamburgerView() {
         if self.hamburgerViewLeadingConstraintt.constant != 0  {
-            gamburgerBackgroundView.alpha = 0.7
+            bgHamburgerViewTrailing.constant = 380
             self.hamburgerViewLeadingConstraintt.constant = 0
             UIView.animate(withDuration: 0.6, delay: 0.0, options: .layoutSubviews, animations: {
                 self.view.layoutIfNeeded()
@@ -47,12 +69,11 @@ class ViewController: UIViewController {
     
     private func hideHamburgeView() {
         if self.hamburgerViewLeadingConstraintt.constant == 0 {
-            gamburgerBackgroundView.alpha = 0.0
+            bgHamburgerViewTrailing.constant = -380
             self.hamburgerViewLeadingConstraintt.constant = -380
             UIView.animate(withDuration: 0.6, delay: 0.0, options: .layoutSubviews, animations: {
                 self.view.layoutIfNeeded()})
         }
     }
-    
 }
 
