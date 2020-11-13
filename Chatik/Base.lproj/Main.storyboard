@@ -52,17 +52,17 @@
                                             <outlet property="messageLabel" destination="3Jl-hh-yxy" id="QLo-4K-nbw"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellUser" id="fOv-b1-fcC" customClass="UserMessageTableViewCell" customModule="Chatik" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="71" width="414" height="21"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellUser" id="AaD-tA-lXQ" customClass="UserMessageTableViewCell" customModule="Chatik" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="71" width="414" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fOv-b1-fcC" id="HEx-jZ-7O9">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="21"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AaD-tA-lXQ" id="v54-Yp-cng">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UserMessage" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jjm-rF-Wu4">
-                                                    <rect key="frame" x="149" y="0.0" width="250" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vJH-Aq-szA">
+                                                    <rect key="frame" x="152" y="11" width="250" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="250" id="hWJ-Xf-73H"/>
+                                                        <constraint firstAttribute="width" constant="250" id="xgm-Ba-pNE"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -76,13 +76,13 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Jjm-rF-Wu4" firstAttribute="top" secondItem="HEx-jZ-7O9" secondAttribute="top" id="Sbs-3E-dRa"/>
-                                                <constraint firstAttribute="bottom" secondItem="Jjm-rF-Wu4" secondAttribute="bottom" id="ebZ-Lx-hde"/>
-                                                <constraint firstAttribute="trailing" secondItem="Jjm-rF-Wu4" secondAttribute="trailing" constant="15" id="k70-GJ-6Ac"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="vJH-Aq-szA" secondAttribute="bottom" id="8UV-AV-8JX"/>
+                                                <constraint firstItem="vJH-Aq-szA" firstAttribute="trailing" secondItem="v54-Yp-cng" secondAttribute="trailingMargin" constant="8" id="Bwn-4a-7FV"/>
+                                                <constraint firstItem="vJH-Aq-szA" firstAttribute="top" secondItem="v54-Yp-cng" secondAttribute="topMargin" id="bbm-dQ-XXb"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="messageLabel" destination="Jjm-rF-Wu4" id="QxZ-eZ-Hik"/>
+                                            <outlet property="messageLabel" destination="vJH-Aq-szA" id="JwD-Fl-37I"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -97,10 +97,13 @@
                                             <constraint firstAttribute="height" constant="50" id="hmm-SF-8v9"/>
                                             <constraint firstAttribute="width" constant="50" id="oEX-si-D4W"/>
                                         </constraints>
-                                        <state key="normal" title="Button"/>
+                                        <state key="normal" title="Send"/>
+                                        <connections>
+                                            <action selector="sendMessage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="e6q-WS-7Om"/>
+                                        </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="CBh-ri-vwc">
-                                        <rect key="frame" x="80" y="15" width="254" height="50"/>
+                                        <rect key="frame" x="30" y="15" width="304" height="50"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                         <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -108,10 +111,10 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Xw-Td-I5P">
-                                        <rect key="frame" x="15" y="15" width="50" height="50"/>
+                                        <rect key="frame" x="15" y="15" width="0.0" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="fEB-A0-9LT"/>
-                                            <constraint firstAttribute="width" constant="50" id="mQe-Sg-Zv3"/>
+                                            <constraint firstAttribute="width" id="mQe-Sg-Zv3"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                     </button>

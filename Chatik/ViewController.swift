@@ -21,6 +21,20 @@ class ViewController: UIViewController {
     @IBOutlet weak var bottomViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     
+    var messages:[(Bool,String)]? = [(false,"12334454546565656565433453454435344534534"),
+                                     (true, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv"),
+                                     (false, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv"),
+    (false, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv")]
+    
+    @IBAction func sendMessage(_ sender: Any) {
+        if !textView.text.isEmpty {
+            messages?.append((true,textView.text))
+            textView.text = ""
+            guard let messages =  messages, messages.count > 0 else { return }
+            tableView.reloadData() // TODO: reloadRows
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -83,23 +97,32 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if let messages = messages {
+            return messages.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        if let (isUserMessage,message) = messages?[indexPath.row] {
+            if isUserMessage {
+                let cell = tableView.dequeueReusableCell(
+                       withIdentifier: "CellUser",
+                       for: indexPath) as! UserMessageTableViewCell
+                       cell.messageLabel.text = message
+                       return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(
+                   withIdentifier: "Cell",
+                   for: indexPath) as! ChatMessageTableViewCell
+                   cell.messageLabel.text = message
+                   return cell
+            }
+        }
         let cell = tableView.dequeueReusableCell(
         withIdentifier: "Cell",
-        for: indexPath) as! ChatMessageTableViewCell
-        cell.messageLabel.text = "qwtqwywteuwetwqyetqwueytwqyetqwetqweytwqueytwqueytwqyetwqyetqwuyetwquyetwquyetwqqtwequwyetqwyet"
+        for: indexPath) as UITableViewCell
         return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(
-                   withIdentifier: "CellUser",
-                   for: indexPath) as! UserMessageTableViewCell
-                   cell.messageLabel.text = "qwtqwywteuwetwqyetqwueytwqyetqwetqweytwqueytwqueytwqyetwqyetqwuyetwquyetwquyetwqqtwequwyetqwyet"
-                   return cell
-        }
     }
     
     
