@@ -351,10 +351,14 @@
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gUa-na-boN">
                                         <rect key="frame" x="137" y="44" width="100" height="100"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="iSh-Yc-8EI"/>
                                             <constraint firstAttribute="height" constant="100" id="yyX-Tz-meF"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="lQ4-Rw-dMn" appends="YES" id="gCD-uy-3uO"/>
+                                        </connections>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -367,13 +371,16 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfv-Xz-Sfr">
-                                <rect key="frame" x="310" y="69" width="84" height="34"/>
+                                <rect key="frame" x="304" y="69" width="90" height="34"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="84" id="RkQ-u9-CTV"/>
+                                    <constraint firstAttribute="width" constant="90" id="RkQ-u9-CTV"/>
                                     <constraint firstAttribute="height" constant="34" id="ifg-qk-NiI"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Изменить"/>
+                                <connections>
+                                    <action selector="changeButtonTappedAction:" destination="iLO-sZ-lhX" eventType="touchUpInside" id="Y1A-BM-hwz"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpN-bR-41P">
                                 <rect key="frame" x="20" y="321" width="374" height="91"/>
@@ -495,8 +502,19 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="pgh-GS-O2P"/>
                     </view>
+                    <connections>
+                        <outlet property="userEmailLabel" destination="n87-sl-91Q" id="Mc7-nG-9p4"/>
+                        <outlet property="userImageView" destination="gUa-na-boN" id="BrN-QE-3O8"/>
+                        <outlet property="userNameTextField" destination="4cY-hA-Y8F" id="xRH-GL-u7G"/>
+                        <outlet property="userPasswordTextField" destination="KNR-KR-Uu1" id="N9U-ca-AQY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cka-Y4-0pb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="lQ4-Rw-dMn">
+                    <connections>
+                        <action selector="userAvatarTapAction:" destination="iLO-sZ-lhX" id="eeX-gH-8HZ"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1550.7246376811595" y="-183.48214285714286"/>
         </scene>

@@ -31,7 +31,7 @@ class HamburgerViewController: UIViewController {
         userImageView.clipsToBounds = true
         userFirstNameLettersLabel.text = ""
         if user.avatar != "" {
-            userImageView.image = UIImage(named: "chatUserAvatar")
+            userImageView.image = UIImage(named: user.avatar)
         } else {
             userImageView.image = UIImage(named: "defaultUser")
             if user.name != "", user.name.count > 0 {
@@ -58,6 +58,7 @@ class HamburgerViewController: UIViewController {
         delegate?.openSettingsVCButtonTapped()
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         let secondVc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsViewController
+        secondVc.user = user
         present(secondVc, animated: true, completion: nil)
     }
     

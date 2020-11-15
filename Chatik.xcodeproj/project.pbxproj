@@ -53,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				617600FD255BF86600ABA3B8 /* HamburgerViewController.swift */,
+				6176010D2561B16800ABA3B8 /* SettingsViewController.swift */,
 				617600E8255BF1F900ABA3B8 /* Chatik */,
 				617600E7255BF1F900ABA3B8 /* Products */,
 			);
@@ -75,7 +76,6 @@
 				617600EB255BF1F900ABA3B8 /* SceneDelegate.swift */,
 				617600ED255BF1F900ABA3B8 /* ViewController.swift */,
 				617600EF255BF1F900ABA3B8 /* Main.storyboard */,
-				6176010D2561B16800ABA3B8 /* SettingsViewController.swift */,
 				617600F2255BF1FD00ABA3B8 /* Assets.xcassets */,
 				617600F4255BF1FD00ABA3B8 /* LaunchScreen.storyboard */,
 				617600F7255BF1FD00ABA3B8 /* Info.plist */,
