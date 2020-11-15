@@ -10,7 +10,10 @@ import UIKit
 
 class HamburgerViewController: UIViewController {
     
+    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var userFirstNameLettersLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
+    var user: ChatUser!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +23,18 @@ class HamburgerViewController: UIViewController {
     private func setupViews() {
         userImageView.layer.cornerRadius = 45.0
         userImageView.clipsToBounds = true
+        userFirstNameLettersLabel.text = ""
+        if user.avatar != "" {
+            userImageView.image = UIImage(named: "chatUserAvatar")
+        } else {
+            userImageView.image = UIImage(named: "defaultUser")
+            if user.name != "", user.name.count > 0 {
+                userFirstNameLettersLabel.text = String(user.name.prefix(1))
+            }
+        }
+        userNameLabel.text = user.name
     }
+
 
     @IBAction func swipeGestureRecogniserAction(_ sender: UISwipeGestureRecognizer) {
     }

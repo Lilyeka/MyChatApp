@@ -150,7 +150,7 @@
                                             <constraint firstAttribute="width" constant="250" id="Z2m-U3-05O"/>
                                         </constraints>
                                         <connections>
-                                            <segue destination="YsU-SW-ZzN" kind="embed" id="FAx-li-0ME"/>
+                                            <segue destination="YsU-SW-ZzN" kind="embed" identifier="HamburgerSegue" id="FAx-li-0ME"/>
                                         </connections>
                                     </containerView>
                                 </subviews>
@@ -310,7 +310,9 @@
                         <viewLayoutGuide key="safeArea" id="7L4-qv-lmL"/>
                     </view>
                     <connections>
+                        <outlet property="userFirstNameLettersLabel" destination="cLh-7b-KEm" id="LCR-Mq-2RM"/>
                         <outlet property="userImageView" destination="Ude-Ul-dj7" id="mZI-yJ-hJL"/>
+                        <outlet property="userNameLabel" destination="2uF-Y5-XNp" id="O72-1N-2Sd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5kj-Hs-7E0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

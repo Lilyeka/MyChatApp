@@ -15,16 +15,24 @@ class ViewController: UIViewController {
     @IBOutlet weak var viewTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var viewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var bgHamburgerViewTrailing: NSLayoutConstraint!
+    @IBOutlet weak var bottomViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var gamburgerBackgroundView: UIView!
     @IBOutlet weak var hamburgerView: UIView!
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var bottomViewBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var tableView: UITableView!
+    
+    var requestedVC: HamburgerViewController?
     
     var messages:[(Bool,String)]? = [(false,"12334454546565656565433453454435344534534"),
                                      (true, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv"),
                                      (false, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv"),
     (false, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv")]
+    
+    var user: ChatUser = ChatUser(avatar: "chatUserAvatar",
+                                  name: "Вася",
+                                  email: "vasya@gmail.com",
+                                  password: "123456")
+
     
     @IBAction func sendMessage(_ sender: Any) {
         if !textView.text.isEmpty, messages != nil {
@@ -43,8 +51,20 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
+        addKeyboardObservers()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.notificationAction(_:)), name: NSNotification.Name.hamburgerVCDidLoadNotification, object: nil)
+    }
+    
+    private func addKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func notificationAction(_ notifucation: Notification?) {
+        requestedVC = notifucation?.object as? HamburgerViewController
+        requestedVC?.user = user
+        
     }
     
     @IBAction func tapOnTheBaseTableView(_ sender: UITapGestureRecognizer) {
@@ -86,6 +106,11 @@ class ViewController: UIViewController {
                 self.view.layoutIfNeeded()
             })
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let hamburgerViewController = segue.destination as? HamburgerViewController
+        hamburgerViewController?.user = user
     }
     
     private func hideHamburgeView() {
