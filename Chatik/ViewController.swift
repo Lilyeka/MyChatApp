@@ -52,8 +52,6 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.separatorStyle = .none
         addKeyboardObservers()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.notificationAction(_:)), name: NSNotification.Name.hamburgerVCDidLoadNotification, object: nil)
     }
     
     private func addKeyboardObservers() {
@@ -62,9 +60,7 @@ class ViewController: UIViewController {
     }
     
     @objc func notificationAction(_ notifucation: Notification?) {
-        requestedVC = notifucation?.object as? HamburgerViewController
-        requestedVC?.user = user
-        
+         hideHamburgeView()
     }
     
     @IBAction func tapOnTheBaseTableView(_ sender: UITapGestureRecognizer) {
@@ -111,6 +107,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let hamburgerViewController = segue.destination as? HamburgerViewController
         hamburgerViewController?.user = user
+        hamburgerViewController?.delegate = self
     }
     
     private func hideHamburgeView() {
@@ -154,6 +151,12 @@ extension ViewController: UITableViewDataSource {
     }
     
     
+}
+
+extension ViewController: HamburgerViewControllerDelegate {
+    func openSettingsVCButtonTapped() {
+        hideHamburgeView()
+    }
 }
 
 extension ViewController: UITableViewDelegate {

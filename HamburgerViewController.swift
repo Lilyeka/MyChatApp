@@ -8,12 +8,18 @@
 
 import UIKit
 
+protocol HamburgerViewControllerDelegate {
+    func openSettingsVCButtonTapped()
+}
+
 class HamburgerViewController: UIViewController {
     
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userFirstNameLettersLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
+    
     var user: ChatUser!
+    var delegate:HamburgerViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +55,10 @@ class HamburgerViewController: UIViewController {
     */
     
     @IBAction func settingsBtnAction(_ sender: UIButton) {
-        
+        delegate?.openSettingsVCButtonTapped()
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let secondVc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsViewController
+        present(secondVc, animated: true, completion: nil)
     }
     
     @IBAction func exitBtnAction(_ sender: UIButton) {
