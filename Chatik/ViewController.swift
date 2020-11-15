@@ -27,11 +27,14 @@ class ViewController: UIViewController {
     (false, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv")]
     
     @IBAction func sendMessage(_ sender: Any) {
-        if !textView.text.isEmpty {
-            messages?.append((true,textView.text))
+        if !textView.text.isEmpty, messages != nil {
+            messages!.append((true,textView.text))
+            let indexPath = IndexPath(item: messages!.count - 1, section: 0)
+            tableView.beginUpdates()
+            tableView.insertRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
             textView.text = ""
-            guard let messages =  messages, messages.count > 0 else { return }
-            tableView.reloadData() // TODO: reloadRows
+            tableView.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
         }
     }
     
