@@ -49,9 +49,10 @@ class SettingsViewController: UIViewController {
             userNameTextField.isUserInteractionEnabled = true
             userPasswordTextField.isUserInteractionEnabled = true
         } else {
-            //TODO - save avatar
+       
             user.name = userNameTextField.text ?? ""
             user.password = userPasswordTextField.text ?? ""
+             //TODO - save name and  password in firebase
             NotificationCenter.default.post(name: NSNotification.Name.userSettingsChangedNotification,
                                                  object: user)
             self.view.endEditing(true)
@@ -69,5 +70,6 @@ extension SettingsViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?) {
         self.userImageView.image = image
+             //TODO - save avatar in firebase
     }
 }

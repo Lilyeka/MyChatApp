@@ -20,6 +20,7 @@
 		6176010C2560D16E00ABA3B8 /* NSNotification+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6176010B2560D16E00ABA3B8 /* NSNotification+Extention.swift */; };
 		6176010E2561B16800ABA3B8 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6176010D2561B16800ABA3B8 /* SettingsViewController.swift */; };
 		617601102562FD9A00ABA3B8 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6176010F2562FD9A00ABA3B8 /* ImagePicker.swift */; };
+		6176011225631BDD00ABA3B8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6176011125631BDD00ABA3B8 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		6176010B2560D16E00ABA3B8 /* NSNotification+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotification+Extention.swift"; sourceTree = "<group>"; };
 		6176010D2561B16800ABA3B8 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6176010F2562FD9A00ABA3B8 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		6176011125631BDD00ABA3B8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 		617600DD255BF1F900ABA3B8 = {
 			isa = PBXGroup;
 			children = (
+				6176011125631BDD00ABA3B8 /* LoginViewController.swift */,
 				617600FD255BF86600ABA3B8 /* HamburgerViewController.swift */,
 				6176010F2562FD9A00ABA3B8 /* ImagePicker.swift */,
 				6176010D2561B16800ABA3B8 /* SettingsViewController.swift */,
@@ -185,6 +188,7 @@
 				61760104255F2CFC00ABA3B8 /* ChatMessageTableViewCell.swift in Sources */,
 				617601082560CABA00ABA3B8 /* ChatUser.swift in Sources */,
 				6176010E2561B16800ABA3B8 /* SettingsViewController.swift in Sources */,
+				6176011225631BDD00ABA3B8 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
