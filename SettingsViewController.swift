@@ -13,14 +13,17 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var userPasswordTextField: UITextField!
     @IBOutlet weak var userEmailLabel: UILabel!
+   
+    var imagePicker: ImagePicker!
+
     
     var isEditingState = false
-
     var user: ChatUser!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
+        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
     func setupSubviews() {
@@ -35,7 +38,8 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func userAvatarTapAction(_ sender: UITapGestureRecognizer) {
-        print("Выбрать новый аватар")
+        self.view.endEditing(true)
+        self.imagePicker.present(from: sender.view!)
     }
     @IBAction func changeButtonTappedAction(_ sender: UIButton) {
         if !isEditingState {
@@ -50,9 +54,20 @@ class SettingsViewController: UIViewController {
             user.password = userPasswordTextField.text ?? ""
             NotificationCenter.default.post(name: NSNotification.Name.userSettingsChangedNotification,
                                                  object: user)
+            self.view.endEditing(true)
             self.dismiss(animated: true) 
         }
-        
     }
     
+    @IBAction func tapOnSettingsGestureRecogniser(_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+}
+
+extension SettingsViewController: ImagePickerDelegate {
+
+    func didSelect(image: UIImage?) {
+        self.userImageView.image = image
+    }
 }
