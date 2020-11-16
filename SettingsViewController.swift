@@ -45,9 +45,12 @@ class SettingsViewController: UIViewController {
             userNameTextField.isUserInteractionEnabled = true
             userPasswordTextField.isUserInteractionEnabled = true
         } else {
-            //user.avatar
+            //TODO - save avatar
             user.name = userNameTextField.text ?? ""
             user.password = userPasswordTextField.text ?? ""
+            NotificationCenter.default.post(name: NSNotification.Name.userSettingsChangedNotification,
+                                                 object: user)
+            self.dismiss(animated: true) 
         }
         
     }

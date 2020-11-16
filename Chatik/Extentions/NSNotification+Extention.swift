@@ -9,6 +9,6 @@
 import Foundation
 
 extension Notification.Name {
-    static let openSettingsVCButtonTappedNotification = Notification.Name(
-       rawValue: "OpenSettingsVCButtonTapped")
+    static let userSettingsChangedNotification = Notification.Name(
+       rawValue: "userSettingsChangedNotification")
 }

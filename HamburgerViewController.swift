@@ -13,19 +13,22 @@ protocol HamburgerViewControllerDelegate {
 }
 
 class HamburgerViewController: UIViewController {
-    
+     //MARK: - IBOutlet
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userFirstNameLettersLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
     
+    //MARK: - Variables
     var user: ChatUser!
     var delegate:HamburgerViewControllerDelegate?
     
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.userSettingsChangedNotificationAction(_:)), name: NSNotification.Name.userSettingsChangedNotification, object: nil)
     }
-    
+     // MARK: - Private methods
     private func setupViews() {
         userImageView.layer.cornerRadius = 45.0
         userImageView.clipsToBounds = true
@@ -40,19 +43,10 @@ class HamburgerViewController: UIViewController {
         }
         userNameLabel.text = user.name
     }
-
-
+    
+    // IBActions
     @IBAction func swipeGestureRecogniserAction(_ sender: UISwipeGestureRecognizer) {
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     @IBAction func settingsBtnAction(_ sender: UIButton) {
         delegate?.openSettingsVCButtonTapped()
@@ -64,7 +58,9 @@ class HamburgerViewController: UIViewController {
     
     @IBAction func exitBtnAction(_ sender: UIButton) {
     }
-   
-
-
+    
+    // MARK: - Notification
+    @objc func userSettingsChangedNotificationAction(_ notification: Notification?) {
+        setupViews()
+    }
 }
