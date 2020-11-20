@@ -11,7 +11,9 @@ import UIKit
 class LoginViewController: UIViewController {
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var regView: UIView!
-    @IBOutlet weak var loginView: UIView!
+
+    @IBOutlet weak var logView: UIView!
+    
     @IBOutlet weak var loginTabBarItem: UITabBarItem!
     
     override func viewDidLoad() {
@@ -24,12 +26,12 @@ class LoginViewController: UIViewController {
 extension LoginViewController: UITabBarDelegate {
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         switch item.tag {
-        case 0:         //вход
-            loginView.isHidden = false
+        case 1:          //регистрация
+            logView.isHidden = true
+             regView.isHidden = false
+        case 0:   //вход
+           logView.isHidden = false
             regView.isHidden = true
-        case 1:       //регистрация
-            loginView.isHidden = true
-            regView.isHidden = false
         default:
             break
         }
