@@ -14,6 +14,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var regView: UIView!
     @IBOutlet weak var logView: UIView!
     @IBOutlet weak var loginTabBarItem: UITabBarItem!
+    @IBOutlet weak var signUpTabBarItem: UITabBarItem!
     @IBOutlet weak var signInEmailTextField: UITextField!
     @IBOutlet weak var signInPasswordTextField: UITextField!
     @IBOutlet weak var signUpEmailTextField: UITextField!
@@ -29,24 +30,34 @@ class LoginViewController: UIViewController {
     }
     
     deinit {
-         NotificationCenter.default.removeObserver(self);
-     }
+        NotificationCenter.default.removeObserver(self);
+    }
     
     @IBAction func signInButtonTapped(_ sender: UIButton) {
+        guard
+            let email = signInEmailTextField.text,
+            let password = signInPasswordTextField.text,
+            email.count > 0,
+            password.count > 0
+            else { return }
+            signInUser(email: email, password: password)
+//        Auth.auth().signIn(withEmail: email, password: password) { user, error in
+//            if let error = error, user == nil {
+//                self.showErrorAlert(title: "Sign In Failed", description: error.localizedDescription)
+//            }
+//
+//        }
     }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton) {
-        // TODO - До показа кнопки пароли д.б. проверены на совпадение, и емэйл проверен на правильность
-        
         guard let emailField = signUpEmailTextField.text,
             let passwordField = signUpPasswordTextField.text,
             let repeatPasswodField = signUpPasswordRepeatTextField.text else { return }
         if passwordField == repeatPasswodField {
             createUser(email: emailField, password: passwordField)
         } else {
-            showErrorAlert(title: "Ошибка совпадения паролей", description: "Введите пароли заново")
+            showErrorAlert(title: "Ошибка", description: "Пароли не совпадают. Введите пароли заново")
         }
-        
     }
     
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
@@ -65,17 +76,29 @@ class LoginViewController: UIViewController {
         
     }
     
+    private func signInUser(email: String, password: String) {
+        Auth.auth().signIn(withEmail: email,
+                           password: password){ user, error in
+                            if let error = error, user == nil {
+                                self.showErrorAlert(title: "Sign In Filed", description: error.localizedDescription)
+                            } else {
+                                self.goToChatViewController()
+                            }
+        }
+    }
+    
     private func createUser(email: String, password: String) {
         Auth.auth().createUser(withEmail: email, password: password) { user, error in
             if error == nil {
-                Auth.auth().signIn(withEmail: email,
-                                   password: password){ user, error in
-                                    if let error = error, user == nil {
-                                        self.showErrorAlert(title: "Sign In Filed", description: error.localizedDescription)
-                                    } else {
-                                        self.goToChatViewController()
-                                    }
-                }
+//                Auth.auth().signIn(withEmail: email,
+//                                   password: password){ user, error in
+//                                    if let error = error, user == nil {
+//                                        self.showErrorAlert(title: "Sign In Filed", description: error.localizedDescription)
+//                                    } else {
+//                                        self.goToChatViewController()
+//                                    }
+//                }
+                self.signInUser(email: email, password: password)
             } else {
                 self.showErrorAlert(title: "Sign Up Filed", description: error!.localizedDescription)
             }
@@ -83,19 +106,16 @@ class LoginViewController: UIViewController {
     }
     
     private func showErrorAlert(title: String, description: String) {
-           let alert = UIAlertController(title: title,
-                                         message: description,
-                                         preferredStyle: .alert)
-           
-           alert.addAction(UIAlertAction(title: "OK", style: .default))
-           self.present(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: title, message: description, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func addAuthObserver() {
         Auth.auth().addStateDidChangeListener() { auth, user in
-          if user != nil {
-            self.goToChatViewController()
-          }
+            if user != nil {
+                self.goToChatViewController()
+            }
         }
     }
     
@@ -107,17 +127,16 @@ class LoginViewController: UIViewController {
         self.signUpPasswordTextField.text = nil
         self.signUpPasswordRepeatTextField.text = nil
     }
-    
 }
 
 extension LoginViewController: UITabBarDelegate {
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         switch item.tag {
-        case 1:          //регистрация
+        case 1:   //регистрация
             logView.isHidden = true
-             regView.isHidden = false
+            regView.isHidden = false
         case 0:   //вход
-           logView.isHidden = false
+            logView.isHidden = false
             regView.isHidden = true
         default:
             break
