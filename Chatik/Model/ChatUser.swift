@@ -9,9 +9,10 @@
 import Foundation
 
 public class ChatUser {
+    static var id = UUID().uuidString
+    let email: String
     var avatar: String
     var name: String
-    let email: String
     var password: String
     
     init(avatar: String, name: String, email: String, password: String) {

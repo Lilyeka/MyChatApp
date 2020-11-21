@@ -49,6 +49,7 @@
 		617601132565B4CB00ABA3B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		617601152565B92300ABA3B8 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		617601172566FB5900ABA3B8 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		61760119256858C800ABA3B8 /* Chatik.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chatik.entitlements; sourceTree = "<group>"; };
 		CFA5D0D45CF60BF1E929DBDB /* Pods-Chatik.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chatik.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chatik/Pods-Chatik.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,9 +108,9 @@
 		617600E8255BF1F900ABA3B8 /* Chatik */ = {
 			isa = PBXGroup;
 			children = (
+				61760119256858C800ABA3B8 /* Chatik.entitlements */,
 				6176010A2560D12200ABA3B8 /* Extentions */,
 				617601092560CB9C00ABA3B8 /* Model */,
-				617601172566FB5900ABA3B8 /* ChatMessage.swift */,
 				617600EB255BF1F900ABA3B8 /* SceneDelegate.swift */,
 				617600ED255BF1F900ABA3B8 /* ViewController.swift */,
 				617600EF255BF1F900ABA3B8 /* Main.storyboard */,
@@ -127,6 +128,7 @@
 		617601092560CB9C00ABA3B8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				617601172566FB5900ABA3B8 /* ChatMessage.swift */,
 				617601072560CABA00ABA3B8 /* ChatUser.swift */,
 			);
 			path = Model;
@@ -446,10 +448,14 @@
 			baseConfigurationReference = 0E15A3E294D4663843363E67 /* Pods-Chatik.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Chatik/Chatik.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9A9LR934E6;
 				INFOPLIST_FILE = Chatik/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = L887ddd877.com.Chatik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -462,10 +468,14 @@
 			baseConfigurationReference = CFA5D0D45CF60BF1E929DBDB /* Pods-Chatik.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Chatik/Chatik.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9A9LR934E6;
 				INFOPLIST_FILE = Chatik/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = L887ddd877.com.Chatik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

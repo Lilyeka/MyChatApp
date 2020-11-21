@@ -55,6 +55,10 @@ class ViewController: UIViewController {
         loadData()
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self);
+    }
+    
     private func loadData() {
         // Listen for new messages in the Firebase database
         self.activityIndicatorView.startAnimating()
