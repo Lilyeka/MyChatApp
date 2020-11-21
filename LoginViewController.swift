@@ -41,12 +41,6 @@ class LoginViewController: UIViewController {
             password.count > 0
             else { return }
             signInUser(email: email, password: password)
-//        Auth.auth().signIn(withEmail: email, password: password) { user, error in
-//            if let error = error, user == nil {
-//                self.showErrorAlert(title: "Sign In Failed", description: error.localizedDescription)
-//            }
-//
-//        }
     }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton) {
@@ -82,6 +76,8 @@ class LoginViewController: UIViewController {
                             if let error = error, user == nil {
                                 self.showErrorAlert(title: "Sign In Filed", description: error.localizedDescription)
                             } else {
+                                let uuid = UUID().uuidString
+                                UserDefaults.standard.set(uuid, forKey: "userToken")
                                 self.goToChatViewController()
                             }
         }
@@ -90,14 +86,6 @@ class LoginViewController: UIViewController {
     private func createUser(email: String, password: String) {
         Auth.auth().createUser(withEmail: email, password: password) { user, error in
             if error == nil {
-//                Auth.auth().signIn(withEmail: email,
-//                                   password: password){ user, error in
-//                                    if let error = error, user == nil {
-//                                        self.showErrorAlert(title: "Sign In Filed", description: error.localizedDescription)
-//                                    } else {
-//                                        self.goToChatViewController()
-//                                    }
-//                }
                 self.signInUser(email: email, password: password)
             } else {
                 self.showErrorAlert(title: "Sign Up Filed", description: error!.localizedDescription)

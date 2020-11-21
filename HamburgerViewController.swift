@@ -58,7 +58,7 @@ class HamburgerViewController: UIViewController {
     }
     
     @IBAction func exitBtnAction(_ sender: UIButton) {
-        let user = Auth.auth().currentUser!
+        guard let user = Auth.auth().currentUser else {return}
         let onlineRef = Database.database().reference(withPath: "online/\(user.uid)")
         onlineRef.removeValue { (error, _) in
           if let error = error {
@@ -68,6 +68,7 @@ class HamburgerViewController: UIViewController {
           do {
             try Auth.auth().signOut()
             self.dismiss(animated: true, completion: nil)
+            UserDefaults.standard.set(nil, forKey: "userToken")
           } catch (let error) {
             print("Auth sign out failed: \(error)")
           }
