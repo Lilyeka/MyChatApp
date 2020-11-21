@@ -40,7 +40,7 @@ class LoginViewController: UIViewController {
             email.count > 0,
             password.count > 0
             else { return }
-            signInUser(email: email, password: password)
+            signInUser(email: email, password: password, writeToken: false)
     }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton) {
@@ -70,14 +70,25 @@ class LoginViewController: UIViewController {
         
     }
     
-    private func signInUser(email: String, password: String) {
+    private func signInUser(email: String, password: String, writeToken: Bool) {
         Auth.auth().signIn(withEmail: email,
-                           password: password){ user, error in
-                            if let error = error, user == nil {
+                           password: password){ authResult, error in
+                            if let error = error, authResult == nil {
                                 self.showErrorAlert(title: "Sign In Filed", description: error.localizedDescription)
                             } else {
                                 let uuid = UUID().uuidString
                                 UserDefaults.standard.set(uuid, forKey: "userToken")
+                                if writeToken {
+                                   //записали токен
+                                    let ref = Database.database().reference(withPath: "userTokens")
+                                    let firUser = authResult!.user
+                                    ref.child(uuid).setValue(firUser.uid)
+                                   //Создать юзера и сохранить в таблице users
+                                    var user = ChatUser(avatar: "", name: "", email: email, password: password)
+                                     let refUser = Database.database().reference(withPath: "user-Items")
+                                    refUser.child(firUser.uid).setValue(user.toAnyObject())
+                                    
+                                }
                                 self.goToChatViewController()
                             }
         }
@@ -86,7 +97,7 @@ class LoginViewController: UIViewController {
     private func createUser(email: String, password: String) {
         Auth.auth().createUser(withEmail: email, password: password) { user, error in
             if error == nil {
-                self.signInUser(email: email, password: password)
+                self.signInUser(email: email, password: password, writeToken: true)
             } else {
                 self.showErrorAlert(title: "Sign Up Filed", description: error!.localizedDescription)
             }

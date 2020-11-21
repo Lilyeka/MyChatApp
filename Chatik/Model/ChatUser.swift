@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class ChatUser {
+public class ChatUser  {
     static var id = UUID().uuidString
     let email: String
     var avatar: String
@@ -20,6 +20,15 @@ public class ChatUser {
         self.name = name
         self.email = email
         self.password = password
+    }
+    
+    func toAnyObject() -> [String:String] {
+        let resDictionary:[String:String] =
+            ["email" : email,
+             "avatar" : avatar,
+             "name": name,
+             "password": password]
+        return resDictionary
     }
 }
 
