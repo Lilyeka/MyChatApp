@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var gamburgerBackgroundView: UIView!
     @IBOutlet weak var hamburgerView: UIView!
     @IBOutlet weak var textView: UITextView!
-    
+  
     var requestedVC: HamburgerViewController?
     var activityIndicatorView: UIActivityIndicatorView!
     
@@ -35,6 +35,7 @@ class ViewController: UIViewController {
                                   email: "vasya@gmail.com",
                                   password: "123456")
     let ref = Database.database().reference(withPath: "chatMessage-items")
+    let usersRef = Database.database().reference(withPath: "user-Items")
     var chatMessages = [ChatMessage]()
     
     @IBAction func sendMessage(_ sender: Any) {
@@ -52,6 +53,7 @@ class ViewController: UIViewController {
         tableView.separatorStyle = .none
         addKeyboardObservers()
         addActivityIndicator()
+        loadUser()
         loadData()
     }
     
@@ -59,9 +61,26 @@ class ViewController: UIViewController {
         NotificationCenter.default.removeObserver(self);
     }
     
+    private func loadUser() {
+        Auth.auth().addStateDidChangeListener { auth, user in
+          guard let user = user else { return }
+            var avatar = ""
+            if let photoURL = user.photoURL {
+                do {
+                    avatar = try String(contentsOf: photoURL)
+                }
+                catch{}
+            }
+            let name = user.displayName ?? "Пользователь № \(user.uid)"
+            let email = user.email ?? ""
+            self.user = ChatUser(avatar: avatar, name: name, email: email, password: "")
+        }
+        
+    }
+    
     private func loadData() {
         // Listen for new messages in the Firebase database
-        self.activityIndicatorView.startAnimating()
+       self.activityIndicatorView.startAnimating()
        ref.observe(.childAdded, with: { (snapshot) -> Void in
             if let message = ChatMessage(snapshot: snapshot) {
                 self.chatMessages.append(message)
@@ -90,15 +109,14 @@ class ViewController: UIViewController {
         view.addSubview(activityIndicatorView)
     }
     
-    
     @objc func notificationAction(_ notifucation: Notification?) {
-         hideHamburgeView()
+        hideHamburgeView()
     }
     
     @IBAction func tapOnTheBaseTableView(_ sender: UITapGestureRecognizer) {
         textView.endEditing(true)
-        
     }
+    
     @IBAction func tapBgViewAction(_ sender: UITapGestureRecognizer) {
         hideHamburgeView()
     }
@@ -137,9 +155,12 @@ class ViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let hamburgerViewController = segue.destination as? HamburgerViewController
-        hamburgerViewController?.user = user
-        hamburgerViewController?.delegate = self
+        if segue.identifier == "hamburgerSegue" {
+            let hamburgerViewController = segue.destination as? HamburgerViewController
+          //  hamburgerViewController?.user = user
+           // hamburgerViewController?.uid = uid
+            hamburgerViewController?.delegate = self
+        }
     }
     
     private func hideHamburgeView() {
@@ -154,11 +175,6 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if let messages = messages {
-//            return messages.count
-//        }
-//        return 0
-        
         return chatMessages.count
     }
     
@@ -194,13 +210,15 @@ extension ViewController: UITableViewDataSource {
         for: indexPath) as UITableViewCell
         return cell
     }
-    
-    
 }
 
 extension ViewController: HamburgerViewControllerDelegate {
     func openSettingsVCButtonTapped() {
         hideHamburgeView()
+    }
+    func exitButtonTapped() {
+        hideHamburgeView()
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

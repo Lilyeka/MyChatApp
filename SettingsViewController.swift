@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SettingsViewController: UIViewController {
     @IBOutlet weak var userImageView: UIImageView!
@@ -15,7 +16,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var userEmailLabel: UILabel!
    
     var imagePicker: ImagePicker!
-
+    var selectedImage: Data?
     
     var isEditingState = false
     var user: ChatUser!
@@ -31,7 +32,17 @@ class SettingsViewController: UIViewController {
         userNameTextField.isUserInteractionEnabled = false
         userPasswordTextField.isUserInteractionEnabled = false
          
-        userImageView.image = user.avatar != "" ? UIImage(named: user.avatar) : UIImage(named: "defaultUser")
+        if user.avatar != "" {
+            let islandRef = Storage.storage().reference(forURL: user.avatar)
+                      islandRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                          if let _ = error {
+                              print()
+                          } else if data != nil {
+                              let image = UIImage(data: data!)
+                              self.userImageView.image = image
+                          }
+                      }
+        }
         userNameTextField.text = user.name
         userPasswordTextField.text = user.password
         userEmailLabel.text = user.email
@@ -41,6 +52,7 @@ class SettingsViewController: UIViewController {
         self.view.endEditing(true)
         self.imagePicker.present(from: sender.view!)
     }
+    
     @IBAction func changeButtonTappedAction(_ sender: UIButton) {
         if !isEditingState {
             isEditingState = !isEditingState
@@ -49,10 +61,15 @@ class SettingsViewController: UIViewController {
             userNameTextField.isUserInteractionEnabled = true
             userPasswordTextField.isUserInteractionEnabled = true
         } else {
-       
-            user.name = userNameTextField.text ?? ""
-            user.password = userPasswordTextField.text ?? ""
-             //TODO - save name and  password in firebase
+            let newName = userNameTextField.text ?? ""
+            self.updateProfileInfo(withImage: selectedImage, name: newName) { (error) in
+                print(error)
+            }
+            
+            if let passwText = userPasswordTextField.text, passwText.count > 0, user.password != passwText {
+                Auth.auth().currentUser?.updatePassword(to: passwText) { (error) in
+                }
+            }
             NotificationCenter.default.post(name: NSNotification.Name.userSettingsChangedNotification,
                                                  object: user)
             self.view.endEditing(true)
@@ -64,12 +81,62 @@ class SettingsViewController: UIViewController {
         self.view.endEditing(true)
     }
     
+    func updateProfileInfo(withImage image: Data? = nil, name: String? = nil, _ callback: ((Error?) -> ())? = nil){
+        guard let user = Auth.auth().currentUser else {
+            callback?(nil)
+            return
+        }
+
+        if let image = image{
+            let profileImgReference = Storage.storage().reference().child("profile_pictures").child("\(user.uid).png")
+
+            _ = profileImgReference.putData(image, metadata: nil) { (metadata, error) in
+                if let error = error {
+                    callback?(error)
+                } else {
+                    profileImgReference.downloadURL(completion: { (url, error) in
+                        if let url = url{
+                            self.createProfileChangeRequest(photoUrl: url, name: name, { (error) in
+                                callback?(error)
+                            })
+                        }else{
+                            callback?(error)
+                        }
+                    })
+                }
+            }
+        } else if let name = name{
+            self.createProfileChangeRequest(name: name, { (error) in
+                callback?(error)
+            })
+        }else{
+            callback?(nil)
+        }
+    }
+    
+    func createProfileChangeRequest(photoUrl: URL? = nil, name: String? = nil, _ callback: ((Error?) -> ())? = nil){
+        if let request = Auth.auth().currentUser?.createProfileChangeRequest(){
+            if let name = name{
+                request.displayName = name
+            }
+            if let url = photoUrl{
+                request.photoURL = url
+            }
+            request.commitChanges(completion: { (error) in
+                callback?(error)
+            })
+        }
+    }
+  
+    
 }
 
 extension SettingsViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?) {
-        self.userImageView.image = image
-             //TODO - save avatar in firebase
+        if let image = image {
+            self.userImageView.image = image
+            self.selectedImage = UIImage.pngData(image)()
+        }
     }
 }

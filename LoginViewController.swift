@@ -21,6 +21,10 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var signUpPasswordTextField: UITextField!
     @IBOutlet weak var signUpPasswordRepeatTextField: UITextField!
     
+    var uuid: String = {
+        return UUID().uuidString
+    }()
+                               
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBar.delegate = self
@@ -40,17 +44,20 @@ class LoginViewController: UIViewController {
             email.count > 0,
             password.count > 0
             else { return }
-            signInUser(email: email, password: password, writeToken: false)
+            signInUser(email: email, password: password)
     }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton) {
         guard let emailField = signUpEmailTextField.text,
             let passwordField = signUpPasswordTextField.text,
-            let repeatPasswodField = signUpPasswordRepeatTextField.text else { return }
+            let repeatPasswodField = signUpPasswordRepeatTextField.text else {
+                showErrorAlert(title: "Ошибка", description: "Не все поля заполнены.")
+                return
+        }
         if passwordField == repeatPasswodField {
             createUser(email: emailField, password: passwordField)
         } else {
-            showErrorAlert(title: "Ошибка", description: "Пароли не совпадают. Введите пароли заново")
+            showErrorAlert(title: "Ошибка", description: "Пароли не совпадают. Введите пароли заново.")
         }
     }
     
@@ -70,34 +77,35 @@ class LoginViewController: UIViewController {
         
     }
     
-    private func signInUser(email: String, password: String, writeToken: Bool) {
+    private func signInUser(email: String, password: String) {
         Auth.auth().signIn(withEmail: email,
                            password: password){ authResult, error in
                             if let error = error, authResult == nil {
                                 self.showErrorAlert(title: "Sign In Filed", description: error.localizedDescription)
                             } else {
-                                let uuid = UUID().uuidString
-                                UserDefaults.standard.set(uuid, forKey: "userToken")
-                                if writeToken {
-                                   //записали токен
-                                    let ref = Database.database().reference(withPath: "userTokens")
-                                    let firUser = authResult!.user
-                                    ref.child(uuid).setValue(firUser.uid)
-                                   //Создать юзера и сохранить в таблице users
-                                    var user = ChatUser(avatar: "", name: "", email: email, password: password)
-                                     let refUser = Database.database().reference(withPath: "user-Items")
-                                    refUser.child(firUser.uid).setValue(user.toAnyObject())
-                                    
-                                }
-                                self.goToChatViewController()
+                                self.goToChatViewController(uid: authResult!.user.uid)
                             }
         }
     }
     
     private func createUser(email: String, password: String) {
-        Auth.auth().createUser(withEmail: email, password: password) { user, error in
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if error == nil {
-                self.signInUser(email: email, password: password, writeToken: true)
+                //записали токен в память приложения на телефоне
+                UserDefaults.standard.set(self.uuid, forKey: "userToken")
+                
+                //записали токен и id юзера
+                let ref = Database.database().reference(withPath: "userTokens")
+                let firUser = authResult!.user
+                ref.child(self.uuid).setValue(firUser.uid)
+                
+                //Создать юзера и сохранить в таблице users
+                var user = ChatUser(avatar: "", name: "Пользователь №\(firUser.uid)", email: email, password: password)
+                let refUser = Database.database().reference(withPath: "user-Items")
+                refUser.child(firUser.uid).setValue(user.toAnyObject())
+                
+                //вход
+                self.signInUser(email: email, password: password)
             } else {
                 self.showErrorAlert(title: "Sign Up Filed", description: error!.localizedDescription)
             }
@@ -113,19 +121,27 @@ class LoginViewController: UIViewController {
     private func addAuthObserver() {
         Auth.auth().addStateDidChangeListener() { auth, user in
             if user != nil {
-                self.goToChatViewController()
+                self.goToChatViewController(uid: user!.uid)
             }
         }
     }
     
-    private func goToChatViewController() {
-        self.performSegue(withIdentifier: "goToChatSegue", sender: nil)
+    private func goToChatViewController(uid: String) {
+        self.performSegue(withIdentifier: "goToChatSegue", sender: uid)
         self.signInEmailTextField.text = nil
         self.signInPasswordTextField.text = nil
         self.signUpEmailTextField.text = nil
         self.signUpPasswordTextField.text = nil
         self.signUpPasswordRepeatTextField.text = nil
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "goToChatSegue" {
+//            guard let object = sender as? String else { return }
+//            let dvc = segue.destination as! ViewController
+//            //dvc.uid = object
+//        }
+//    }
 }
 
 extension LoginViewController: UITabBarDelegate {
