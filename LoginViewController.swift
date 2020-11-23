@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
         tabBar.delegate = self
         tabBar.selectedItem = loginTabBarItem
         addKeyboardObservers()
-        //addAuthObserver()
+        addAuthObserver()
     }
     
     deinit {
@@ -119,11 +119,14 @@ class LoginViewController: UIViewController {
     }
     
     private func addAuthObserver() {
-        Auth.auth().addStateDidChangeListener() { auth, user in
-            if user != nil {
-                self.goToChatViewController(uid: user!.uid)
-            }
+        if let token = UserDefaults.standard.string(forKey: "userToken") {
+            Auth.auth().addStateDidChangeListener() { auth, user in
+                      if user != nil {
+                          self.goToChatViewController(uid: user!.uid)
+                      }
+                  }
         }
+      
     }
     
     private func goToChatViewController(uid: String) {

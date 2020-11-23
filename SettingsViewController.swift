@@ -10,44 +10,26 @@ import UIKit
 import Firebase
 
 class SettingsViewController: UIViewController {
+    // MARK: - IBOutlets
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var userPasswordTextField: UITextField!
     @IBOutlet weak var userEmailLabel: UILabel!
    
+    // MARK: - Variables
+    var user: ChatUser!
     var imagePicker: ImagePicker!
     var selectedImage: Data?
-    
     var isEditingState = false
-    var user: ChatUser!
-
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
     }
     
-    func setupSubviews() {
-        userImageView.isUserInteractionEnabled = false
-        userNameTextField.isUserInteractionEnabled = false
-        userPasswordTextField.isUserInteractionEnabled = false
-         
-        if user.avatar != "" {
-            let islandRef = Storage.storage().reference(forURL: user.avatar)
-                      islandRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
-                          if let _ = error {
-                              print()
-                          } else if data != nil {
-                              let image = UIImage(data: data!)
-                              self.userImageView.image = image
-                          }
-                      }
-        }
-        userNameTextField.text = user.name
-        userPasswordTextField.text = user.password
-        userEmailLabel.text = user.email
-    }
-    
+    // MARK: - IBActions
     @IBAction func userAvatarTapAction(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
         self.imagePicker.present(from: sender.view!)
@@ -63,15 +45,17 @@ class SettingsViewController: UIViewController {
         } else {
             let newName = userNameTextField.text ?? ""
             self.updateProfileInfo(withImage: selectedImage, name: newName) { (error) in
-                print(error)
+                NotificationCenter.default.post(name: NSNotification.Name.userSettingsChangedNotification,
+                                                            object: self.user)
             }
             
             if let passwText = userPasswordTextField.text, passwText.count > 0, user.password != passwText {
                 Auth.auth().currentUser?.updatePassword(to: passwText) { (error) in
+                    NotificationCenter.default.post(name: NSNotification.Name.userSettingsChangedNotification,
+                                                    object: self.user)
                 }
             }
-            NotificationCenter.default.post(name: NSNotification.Name.userSettingsChangedNotification,
-                                                 object: user)
+          
             self.view.endEditing(true)
             self.dismiss(animated: true) 
         }
@@ -81,7 +65,31 @@ class SettingsViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    func updateProfileInfo(withImage image: Data? = nil, name: String? = nil, _ callback: ((Error?) -> ())? = nil){
+    // MARK: - Private methods
+    private func setupSubviews() {
+        userImageView.isUserInteractionEnabled = false
+        userNameTextField.isUserInteractionEnabled = false
+        userPasswordTextField.isUserInteractionEnabled = false
+        
+        if user.avatar != "" {
+            let islandRef = Storage.storage().reference(forURL: user.avatar)
+            islandRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                if let _ = error {
+                    print()
+                } else if data != nil {
+                    let image = UIImage(data: data!)
+                    self.userImageView.image = image
+                }
+            }
+        } else {
+            self.userImageView.image = UIImage(named: "defaultUser")
+        }
+        userNameTextField.text = user.name
+        userPasswordTextField.text = user.password
+        userEmailLabel.text = user.email
+    }
+    
+    private func updateProfileInfo(withImage image: Data? = nil, name: String? = nil, _ callback: ((Error?) -> ())? = nil){
         guard let user = Auth.auth().currentUser else {
             callback?(nil)
             return
@@ -105,16 +113,16 @@ class SettingsViewController: UIViewController {
                     })
                 }
             }
-        } else if let name = name{
+        } else if let name = name {
             self.createProfileChangeRequest(name: name, { (error) in
                 callback?(error)
             })
-        }else{
+        }else {
             callback?(nil)
         }
     }
     
-    func createProfileChangeRequest(photoUrl: URL? = nil, name: String? = nil, _ callback: ((Error?) -> ())? = nil){
+    private func createProfileChangeRequest(photoUrl: URL? = nil, name: String? = nil, _ callback: ((Error?) -> ())? = nil){
         if let request = Auth.auth().currentUser?.createProfileChangeRequest(){
             if let name = name{
                 request.displayName = name
@@ -127,10 +135,9 @@ class SettingsViewController: UIViewController {
             })
         }
     }
-  
-    
 }
 
+// MARK: - ImagePickerDelegate
 extension SettingsViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?) {
@@ -139,4 +146,8 @@ extension SettingsViewController: ImagePickerDelegate {
             self.selectedImage = UIImage.pngData(image)()
         }
     }
+}
+
+extension SettingsViewController: UITextFieldDelegate {
+    
 }

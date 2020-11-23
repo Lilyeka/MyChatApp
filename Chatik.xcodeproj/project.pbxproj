@@ -82,14 +82,55 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		6149E84E256BBEE800E4FC31 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				617600ED255BF1F900ABA3B8 /* ViewController.swift */,
+				617600FD255BF86600ABA3B8 /* HamburgerViewController.swift */,
+				6149E852256BBFBD00E4FC31 /* Views */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		6149E84F256BBF1300E4FC31 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				6176011125631BDD00ABA3B8 /* LoginViewController.swift */,
+			);
+			name = Login;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		6149E850256BBF3E00E4FC31 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				6176010D2561B16800ABA3B8 /* SettingsViewController.swift */,
+			);
+			name = Settings;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		6149E851256BBF5900E4FC31 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				6176010F2562FD9A00ABA3B8 /* ImagePicker.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		6149E852256BBFBD00E4FC31 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				61760105255F34A400ABA3B8 /* UserMessageTableViewCell.swift */,
+				61760103255F2CFC00ABA3B8 /* ChatMessageTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		617600DD255BF1F900ABA3B8 = {
 			isa = PBXGroup;
 			children = (
 				617600E9255BF1F900ABA3B8 /* AppDelegate.swift */,
-				6176011125631BDD00ABA3B8 /* LoginViewController.swift */,
-				617600FD255BF86600ABA3B8 /* HamburgerViewController.swift */,
-				6176010F2562FD9A00ABA3B8 /* ImagePicker.swift */,
-				6176010D2561B16800ABA3B8 /* SettingsViewController.swift */,
 				617600E8255BF1F900ABA3B8 /* Chatik */,
 				617600E7255BF1F900ABA3B8 /* Products */,
 				2E4873DAF681ED066FA12415 /* Pods */,
@@ -108,19 +149,20 @@
 		617600E8255BF1F900ABA3B8 /* Chatik */ = {
 			isa = PBXGroup;
 			children = (
-				61760119256858C800ABA3B8 /* Chatik.entitlements */,
-				6176010A2560D12200ABA3B8 /* Extentions */,
 				617601092560CB9C00ABA3B8 /* Model */,
+				6149E84E256BBEE800E4FC31 /* Chat */,
+				6149E850256BBF3E00E4FC31 /* Settings */,
+				6149E84F256BBF1300E4FC31 /* Login */,
+				6149E851256BBF5900E4FC31 /* Common */,
+				6176010A2560D12200ABA3B8 /* Extentions */,
+				61760119256858C800ABA3B8 /* Chatik.entitlements */,
 				617600EB255BF1F900ABA3B8 /* SceneDelegate.swift */,
-				617600ED255BF1F900ABA3B8 /* ViewController.swift */,
 				617600EF255BF1F900ABA3B8 /* Main.storyboard */,
 				617600F2255BF1FD00ABA3B8 /* Assets.xcassets */,
 				617600F4255BF1FD00ABA3B8 /* LaunchScreen.storyboard */,
 				617601152565B92300ABA3B8 /* Podfile */,
 				617601132565B4CB00ABA3B8 /* GoogleService-Info.plist */,
 				617600F7255BF1FD00ABA3B8 /* Info.plist */,
-				61760103255F2CFC00ABA3B8 /* ChatMessageTableViewCell.swift */,
-				61760105255F34A400ABA3B8 /* UserMessageTableViewCell.swift */,
 			);
 			path = Chatik;
 			sourceTree = "<group>";
@@ -454,7 +496,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9A9LR934E6;
 				INFOPLIST_FILE = Chatik/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = L887ddd877.com.Chatik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -471,7 +516,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9A9LR934E6;
 				INFOPLIST_FILE = Chatik/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = L887ddd877.com.Chatik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

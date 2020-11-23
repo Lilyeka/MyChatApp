@@ -21,13 +21,9 @@ class HamburgerViewController: UIViewController {
     @IBOutlet weak var userImageView: UIImageView!
     
     //MARK: - Variables
-    var uid: String!
     var user: ChatUser!
     var delegate:HamburgerViewControllerDelegate?
-    
-    let usersRef = Database.database().reference(withPath: "user-Items")
-    
-    
+
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,46 +32,8 @@ class HamburgerViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.userSettingsChangedNotificationAction(_:)), name: NSNotification.Name.userSettingsChangedNotification, object: nil)
     }
-    
-    private func loadUser() {
-        Auth.auth().addStateDidChangeListener { auth, user in
-            guard let user = user else { return }
-            let avatar = ""
-            if user.photoURL != nil {
-                let islandRef = Storage.storage().reference(forURL: user.photoURL!.absoluteString)
-                          islandRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
-                              if let _ = error {
-                                  print()
-                              } else if data != nil {
-                                  let image = UIImage(data: data!)
-                                  self.userImageView.image = image
-                              }
-                          }
-            } else {
-                self.userImageView.image = UIImage(named: "defaultUser")
-                if user.displayName != "", user.displayName!.count > 0 {
-                    self.userFirstNameLettersLabel.text = String(user.displayName!.prefix(1))
-                }
-            }
-            let name = user.displayName ?? "Пользователь № \(user.uid)"
-            self.userNameLabel.text = name
-            let email = user.email ?? ""
-            self.user = ChatUser(avatar: avatar, name: name, email: email, password: "")
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        print("HamburgerViewDidAppear")
-    }
-    
-    // MARK: - Private methods
-    private func setupViews() {
-        userImageView.layer.cornerRadius = 45.0
-        userImageView.clipsToBounds = true
-        userFirstNameLettersLabel.text = ""
-    }
-    
-    // IBActions
+        
+    // MARK: -IBActions
     @IBAction func swipeGestureRecogniserAction(_ sender: UISwipeGestureRecognizer) {
     }
     
@@ -97,8 +55,7 @@ class HamburgerViewController: UIViewController {
             }
             do {
                 try Auth.auth().signOut()
-                // self.dismiss(animated: true, completion: nil)
-                // self.parent?.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
                 self.delegate?.exitButtonTapped()
                 UserDefaults.standard.set(nil, forKey: "userToken")
             } catch (let error) {
@@ -112,9 +69,44 @@ class HamburgerViewController: UIViewController {
         loadUser()
     }
     
+    // MARK: - Private methods
+    private func setupViews() {
+        userImageView.layer.cornerRadius = 45.0
+        userImageView.clipsToBounds = true
+        userFirstNameLettersLabel.text = ""
+    }
+    
     private func showErrorAlert(title: String, description: String) {
         let alert = UIAlertController(title: title, message: description, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func loadUser() {
+        Auth.auth().addStateDidChangeListener { auth, user in
+            guard let user = user else { return }
+            var avatar = ""
+            if user.photoURL != nil {
+                avatar = user.photoURL!.absoluteString
+                let islandRef = Storage.storage().reference(forURL: user.photoURL!.absoluteString)
+                          islandRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                              if let _ = error {
+                                  print()
+                              } else if data != nil {
+                                  let image = UIImage(data: data!)
+                                  self.userImageView.image = image
+                              }
+                          }
+            } else {
+                self.userImageView.image = UIImage(named: "defaultUser")
+                if let userName = user.displayName, userName.count > 0 {
+                    self.userFirstNameLettersLabel.text = String(userName.prefix(1))
+                }
+            }
+            let name = user.displayName ?? "Пользователь № \(user.uid)"
+            self.userNameLabel.text = name
+            let email = user.email ?? ""
+            self.user = ChatUser(avatar: avatar, name: name, email: email, password: "")
+        }
     }
 }

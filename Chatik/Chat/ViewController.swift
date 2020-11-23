@@ -21,31 +21,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var gamburgerBackgroundView: UIView!
     @IBOutlet weak var hamburgerView: UIView!
     @IBOutlet weak var textView: UITextView!
-  
+    //MARK: - Views
     var requestedVC: HamburgerViewController?
     var activityIndicatorView: UIActivityIndicatorView!
-    
-    var messages:[(Bool,String)]? = [(false,"12334454546565656565433453454435344534534"),
-                                     (true, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv"),
-                                     (false, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv"),
-    (false, "qwhqhduiehduehdiuhdiuhfiuehfireuhfireufhireufhierhfiurehhvuhreiuv")]
-    
-    var user: ChatUser = ChatUser(avatar: "chatUserAvatar",
-                                  name: "Вася",
-                                  email: "vasya@gmail.com",
-                                  password: "123456")
-    let ref = Database.database().reference(withPath: "chatMessage-items")
-    let usersRef = Database.database().reference(withPath: "user-Items")
+    //MARK: - Variables
+    var user: ChatUser!
+    var uid: String!
     var chatMessages = [ChatMessage]()
+    //MARK: - Constants
+    let ref = Database.database().reference(withPath: "chatMessage-items")
     
-    @IBAction func sendMessage(_ sender: Any) {
-        if !textView.text.isEmpty {
-            let date = Date()
-            let message = ChatMessage(sender_name: "Иван", text: textView.text, date: date)
-            self.ref.childByAutoId().setValue(message.toAnyObject())
-        }
-    }
-    
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -61,56 +47,13 @@ class ViewController: UIViewController {
         NotificationCenter.default.removeObserver(self);
     }
     
-    private func loadUser() {
-        Auth.auth().addStateDidChangeListener { auth, user in
-          guard let user = user else { return }
-            var avatar = ""
-            if let photoURL = user.photoURL {
-                do {
-                    avatar = try String(contentsOf: photoURL)
-                }
-                catch{}
-            }
-            let name = user.displayName ?? "Пользователь № \(user.uid)"
-            let email = user.email ?? ""
-            self.user = ChatUser(avatar: avatar, name: name, email: email, password: "")
+    //MARK: - IBActions
+    @IBAction func sendMessage(_ sender: Any) {
+        if !textView.text.isEmpty {
+            let date = Date()
+            let message = ChatMessage(sender_name: user.name, sender_id: uid, text: textView.text, date: date)
+            self.ref.childByAutoId().setValue(message.toAnyObject())
         }
-        
-    }
-    
-    private func loadData() {
-        // Listen for new messages in the Firebase database
-       self.activityIndicatorView.startAnimating()
-       ref.observe(.childAdded, with: { (snapshot) -> Void in
-            if let message = ChatMessage(snapshot: snapshot) {
-                self.chatMessages.append(message)
-            }
-            let indexPath = IndexPath(row: self.chatMessages.count - 1, section: 0)
-            self.tableView.beginUpdates()
-            self.tableView.insertRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            self.tableView.endUpdates()
-            self.textView.text = ""
-            self.tableView.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
-            self.activityIndicatorView.stopAnimating()
-        })
-    }
-    
-    private func addKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    private func addActivityIndicator() {
-        activityIndicatorView = UIActivityIndicatorView()
-        activityIndicatorView.style = UIActivityIndicatorView.Style.medium
-        let bounds: CGRect = UIScreen.main.bounds
-        activityIndicatorView.center = CGPoint(x: bounds.size.width / 2, y: bounds.size.height / 2)
-        activityIndicatorView.hidesWhenStopped = true
-        view.addSubview(activityIndicatorView)
-    }
-    
-    @objc func notificationAction(_ notifucation: Notification?) {
-        hideHamburgeView()
     }
     
     @IBAction func tapOnTheBaseTableView(_ sender: UITapGestureRecognizer) {
@@ -129,6 +72,11 @@ class ViewController: UIViewController {
         showHamburgerView()
     }
     
+    //MARK: - Actions
+    @objc func notificationAction(_ notifucation: Notification?) {
+        hideHamburgeView()
+    }
+    
     @objc func keyboardWillShow(notification: Notification) {
         let keyboardSize = (notification.userInfo?  [UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         let keyboardHeight = keyboardSize?.height
@@ -144,6 +92,60 @@ class ViewController: UIViewController {
         UIView.animate(withDuration: 0.5){ self.view.layoutIfNeeded() }
     }
     
+    //MARK: - Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "hamburgerSegue" {
+            let hamburgerViewController = segue.destination as? HamburgerViewController
+            hamburgerViewController?.delegate = self
+        }
+    }
+    
+    //MARK: - Private methods
+    private func loadUser() {
+        Auth.auth().addStateDidChangeListener { auth, user in
+            guard let user = user else { return }
+            var avatar = ""
+            if let photoURL = user.photoURL {
+                avatar = photoURL.absoluteString
+            }
+            let name = user.displayName ?? "Пользователь № \(user.uid)"
+            let email = user.email ?? ""
+            self.uid = user.uid
+            self.user = ChatUser(avatar: avatar, name: name, email: email, password: "")
+        }
+    }
+    
+    private func loadData() {
+        self.activityIndicatorView.startAnimating()
+        ref.observe(.childAdded, with: { (snapshot) -> Void in
+            if let message = ChatMessage(snapshot: snapshot) {
+                self.chatMessages.append(message)
+            }
+            let indexPath = IndexPath(row: self.chatMessages.count - 1, section: 0)
+            self.tableView.beginUpdates()
+            self.tableView.insertRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            self.tableView.endUpdates()
+            self.textView.text = ""
+            self.tableView.scrollToRow(at: indexPath as IndexPath, at: UITableView.ScrollPosition.middle, animated: true)
+            self.activityIndicatorView.stopAnimating()
+        })
+        self.activityIndicatorView.stopAnimating()
+    }
+    
+    private func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func addActivityIndicator() {
+        activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.style = UIActivityIndicatorView.Style.medium
+        let bounds: CGRect = UIScreen.main.bounds
+        activityIndicatorView.center = CGPoint(x: bounds.size.width / 2, y: bounds.size.height / 2)
+        activityIndicatorView.hidesWhenStopped = true
+        view.addSubview(activityIndicatorView)
+    }
+    
     private func showHamburgerView() {
         if self.hamburgerViewLeadingConstraintt.constant != 0  {
             bgHamburgerViewTrailing.constant = 380
@@ -151,15 +153,6 @@ class ViewController: UIViewController {
             UIView.animate(withDuration: 0.6, delay: 0.0, options: .layoutSubviews, animations: {
                 self.view.layoutIfNeeded()
             })
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "hamburgerSegue" {
-            let hamburgerViewController = segue.destination as? HamburgerViewController
-          //  hamburgerViewController?.user = user
-           // hamburgerViewController?.uid = uid
-            hamburgerViewController?.delegate = self
         }
     }
     
@@ -173,45 +166,31 @@ class ViewController: UIViewController {
     }
 }
 
+//MARK: - UITableViewDataSource
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chatMessages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if let (isUserMessage,message) = messages?[indexPath.row] {
-//            if isUserMessage {
-//                let cell = tableView.dequeueReusableCell(
-//                       withIdentifier: "CellUser",
-//                       for: indexPath) as! UserMessageTableViewCell
-//                       cell.messageLabel.text = message
-//                       return cell
-//            } else {
-//                let cell = tableView.dequeueReusableCell(
-//                   withIdentifier: "Cell",
-//                   for: indexPath) as! ChatMessageTableViewCell
-//                   cell.messageLabel.text = message
-//                   return cell
-//            }
-//        }
-        
         var message: ChatMessage?
         if chatMessages.count > 0 { message = chatMessages[indexPath.row]}
         if let message = message {
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: "CellUser",
-                for: indexPath) as! UserMessageTableViewCell
-            cell.messageLabel.text = message.text
-            return cell
+            if message.sender_id == uid {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CellUser", for: indexPath) as! UserMessageTableViewCell
+                cell.messageLabel.text = message.text
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ChatMessageTableViewCell
+                cell.messageLabel.text = message.text
+                return cell
+            }
         }
-        
-        let cell = tableView.dequeueReusableCell(
-        withIdentifier: "Cell",
-        for: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as UITableViewCell
         return cell
     }
 }
-
+//MARK: - HamburgerViewControllerDelegate
 extension ViewController: HamburgerViewControllerDelegate {
     func openSettingsVCButtonTapped() {
         hideHamburgeView()

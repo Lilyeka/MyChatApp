@@ -10,14 +10,18 @@ import Foundation
 import Firebase
 
 struct ChatMessage {
+    var sender_id: String = ""
     var sender_name: String = ""
     var text: String = ""
     var date: Date!
     
     init?(snapshot: DataSnapshot) {
-
         let snapshotValue = snapshot.value as? [String: Any]
-
+        
+        if let id = snapshotValue?["sender_id"] as? String {
+            self.sender_id = id
+        }
+        
         if let name = snapshotValue?["sender_name"] as? String {
             self.sender_name = name
         }
@@ -35,8 +39,9 @@ struct ChatMessage {
         }
     }
     
-    init(sender_name:String, text:String, date: Date ) {
+    init(sender_name:String, sender_id: String, text: String, date: Date) {
         self.sender_name = sender_name
+        self.sender_id = sender_id
         self.text = text
         self.date = date
     }
@@ -47,6 +52,7 @@ struct ChatMessage {
         let resultDate = formatter.string(from: date)
         var resDictionary:[String:String] =
             ["sender_name" : sender_name,
+             "sender_id": sender_id,
              "text" : text,
              "date": resultDate]
         return resDictionary
